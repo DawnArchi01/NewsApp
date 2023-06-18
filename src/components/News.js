@@ -25,32 +25,32 @@ export class News extends Component {
       loading: true
     };
 
-    document.title = `NewsIt - ${this.capitalizeFirstLetter(this.props.category)}` ;
+    document.title = `NewsIt - ${this.capitalizeFirstLetter(this.props.category)}`;
   }
 
   async updateNews() {
-        this.props.setProgress(10);
-        const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.apiKey}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
-        this.setState({ loading: true });
-        let data = await fetch(url);
-        this.props.setProgress(30);
-        let parsedData = await data.json()
-        this.props.setProgress(70);
-        this.setState({
-            articles: parsedData.articles,
-            totalResults: parsedData.totalResults,
-            loading: false, 
-        })
-        this.props.setProgress(100);
+    this.props.setProgress(10);
+    const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.apiKey}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
+    this.setState({ loading: true });
+    let data = await fetch(url);
+    this.props.setProgress(30);
+    let parsedData = await data.json()
+    this.props.setProgress(70);
+    this.setState({
+      articles: parsedData.articles,
+      totalResults: parsedData.totalResults,
+      loading: false,
+    })
+    this.props.setProgress(100);
 
-    }
+  }
 
-  capitalizeFirstLetter = (string)=>{
-    return string.charAt(0).toUpperCase() + string.slice(1) ;
+  capitalizeFirstLetter = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
   async componentDidMount() {
-   this.updateNews() ;
+    this.updateNews();
   }
 
   prevClick = async () => {
@@ -60,17 +60,17 @@ export class News extends Component {
 
   clickNext = async () => {
     this.setState({ page: this.state.page + 1 });
-        this.updateNews()
+    this.updateNews()
   };
 
   render() {
     return (
       <div className="container my-3">
-        <h2 className="text-center" style = {{marginTop : '80px'}}>Top {this.capitalizeFirstLetter(this.props.category)} News</h2>
+        <h2 className="text-center" style={{ marginTop: '80px' }}>Top {this.capitalizeFirstLetter(this.props.category)} News</h2>
         {this.state.loading && <Spinner />}
         <div className="row">
           {!this.state.loading &&
-            this.state.articles.map((element) => {
+            this.state.articles.map(({ element }) => {
               return (
                 <div className="col-md-4" key={element.url}>
                   <NewsItem
